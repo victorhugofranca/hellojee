@@ -1,0 +1,102 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:cruds="http://java.sun.com/jsf/composite/cruds"
+	template="/WEB-INF/templates/cadastro.xhtml">
+
+	<ui:define name="cadastro">
+
+		<p:messages id="msgs" showDetail="true" closable="true">
+			<p:autoUpdate />
+		</p:messages>
+
+		<h:form id="frm_cad_categories">
+
+			<p:panel id="pn_categories" header="Categories">
+
+				<h:panelGrid columns="3" cellpadding="5" cellspacing="2">
+
+					<p:outputLabel for="ipt_categories" value="New Categories" />
+					<p:inputText id="ipt_categories"
+						value="#{categoryView.category.name}" required="true"
+						label="category">
+						<f:validateLength minimum="1" />						
+					</p:inputText>
+					<p:message for="ipt_categories" display="text" />
+
+				</h:panelGrid>
+				<p:commandButton id="btn_record_categories"
+					action="#{categoryView.record}" value="Record" icon="pi pi-save"
+					style="margin-right:10px"
+					update="frm_cad_categories,frm_list_categories" />
+				<p:commandButton id="btn_clean_categories"
+					action="#{categoryView.clean}" value="Clean" icon="pi pi-briefcase"
+					update="frm_cad_categories" process="@this"
+					style="margin-right:10px" />
+
+			</p:panel>
+		</h:form>
+
+		<p:separator />
+
+		<h:form id="frm_list_categories">
+			<p:dataTable var="cat" id="categories"
+				value="#{categoryView.listCategory}" paginator="true"
+				paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+				rowsPerPageTemplate="10,15,20" style="margin-botton:20px">
+
+				<f:facet name="header">List of Categories</f:facet>
+				<p:column headerText="Id">
+					<h:outputText value="#{cat.id}" />
+				</p:column>
+				<p:column headerText="Name">
+					<h:outputText value="#{cat.name}" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="cmb_delete"
+						action="#{categoryView.delete(cat)}" icon="fa fa-fw fa-remove"
+						title="Remove" update="frm_list_categories,msgs" />
+				</p:column>
+				<p:column>
+					<p:commandButton id="cmb_edit" icon="fa fa-fw fa-edit" title="Edit"
+						onclick="PF('dlgEditCategories').show();"
+						update=":frm_list_categories:catDetail">
+						<f:setPropertyActionListener value="#{cat}"
+							target="#{categoryView.selectCategory}" />
+					</p:commandButton>
+				</p:column>
+				<f:facet name="footer">
+					<p:outputLabel value="Aqui ficará o total." />
+				</f:facet>
+			</p:dataTable>
+
+			<p:dialog header="Edit Categories" widgetVar="dlgEditCategories"
+				modal="true" closable="true" width="700" height="100">
+
+				<p:dataTable id="catDetail" var="categorie_selected" value="#{categoryView.selectCategory}">
+					<p:column>
+					   <p:row>
+						<h:outputLabel value="Id:" for="otp_id" />
+						<h:inputText value="#{categoryView.selectCategory.id}"
+							readonly="true" />
+						</p:row>
+					     <p:row>
+						<h:outputLabel value="Name:" for="otp_name" />
+						<h:inputText value="#{categoryView.selectCategory.name}" />
+                       </p:row>
+					</p:column>
+				</p:dataTable>
+				<p:separator/>
+				<p:commandButton id="cmb_atualizar" title="Update"
+							action="#{categoryView.edit(categoryView.selectCategory)}"
+							update="frm_list_categories,msgs" style="margin-right:10px"/>
+			</p:dialog>
+
+		</h:form>
+
+
+
+	</ui:define>
+</ui:composition>

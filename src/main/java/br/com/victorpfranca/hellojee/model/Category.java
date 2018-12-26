@@ -1,9 +1,10 @@
-package br.com.victorpfranca.hellojee.category;
+package br.com.victorpfranca.hellojee.model;
 
-import static br.com.victorpfranca.hellojee.category.Category.FIND_ALL_QUERY;
+import static br.com.victorpfranca.hellojee.model.Category.FIND_ALL_QUERY;
 
 import java.io.Serializable;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,8 +16,8 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-@Entity
-@Table(name = "category")
+@Entity 
+@Table(name = "category" ,schema="public") 
 @NamedQueries({ @NamedQuery(name = FIND_ALL_QUERY, query = "SELECT c FROM Category c") })
 
 public class Category implements Serializable {
@@ -52,8 +53,8 @@ public class Category implements Serializable {
 		return name;
 	}
 
-	public void setName(String nome) {
-		this.name = nome;
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override

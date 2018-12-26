@@ -1,20 +1,31 @@
-<ui:composition template="/WEB-INF/templates/template.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:cruds="http://java.sun.com/jsf/composite/cruds">
+	xmlns:cruds="http://java.sun.com/jsf/composite/cruds"
+	template="/WEB-INF/templates/cadastro.xhtml">
 
-	<p:dataTable id="categories" var="cat"
-		value="#{categoryViewController.list}">
+	<ui:define name="cadastro">
+		<h:form id="frm_login" title="Login">
 
-		<f:facet name="header">Categories</f:facet>
+			<p:panel closable="false"  header="Login" 
+				id="pn_login">
+				<p:column>
+					<p:row>
+						<p:outputLabel for="ipt_login" value="Login" />
+						<p:inputText id="ipt_login" required="true"
+							alt="Informe o usuario." />
+					</p:row>
+					<p:row>
+						<p:outputLabel for="ipt_password" value="Senha" />
+						<p:inputText id="ipt_password" required="true" />
+					</p:row>
+				</p:column>
 
-		<p:column style="border:0px !important;">
-			<h:outputText value="#{obj.nome}" />
-		</p:column>
+			</p:panel>
 
-	</p:dataTable>
 
+		</h:form>
+	</ui:define>
 </ui:composition>
