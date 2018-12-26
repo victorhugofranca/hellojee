@@ -1,4 +1,4 @@
-package br.com.victorpfranca.hellojee.category.view;
+package br.com.victorpfranca.hellojee.view;
 
 import java.io.Serializable;
 import java.util.ArrayList;
