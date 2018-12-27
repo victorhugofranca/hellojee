@@ -1,20 +1,80 @@
-<ui:composition template="/WEB-INF/templates/template.xhtml"
-	xmlns="http://www.w3.org/1999/xhtml"
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
 	xmlns:p="http://primefaces.org/ui"
-	xmlns:cruds="http://java.sun.com/jsf/composite/cruds">
+	xmlns:cruds="http://java.sun.com/jsf/composite/cruds"
+	template="/WEB-INF/templates/template.xhtml">
 
-	<p:dataTable id="categories" var="cat"
-		value="#{categoryViewController.list}">
+	<ui:define name="body">
+       
+		<!-- Iniciando cadastro -->
+		<h:form id="form_register">
 
-		<f:facet name="header">Categories</f:facet>
+			<p:fieldset legend="New Category">
 
-		<p:column style="border:0px !important;">
-			<h:outputText value="#{obj.nome}" />
-		</p:column>
+				<h:panelGrid columns="2" cellpadding="5">
+					<p:outputLabel for="category_id" value="Cod Category:" rendered="#{not empty categoryView.category.id}"/>
+					<p:inputText id="category_id" value="#{categoryView.category.id}" 
+						readonly="true" label="Cod" rendered="#{not empty categoryView.category.id}">
+					</p:inputText>
 
-	</p:dataTable>
+					<p:outputLabel for="category_name" value="Name Category:" />
+					<p:inputText id="category_name" value="#{categoryView.category.name}" required="true"
+						requiredMessage="Enter the name!" label="Category">
+					</p:inputText>
+				</h:panelGrid>
 
+				<p:commandButton value="New Category"  action="#{categoryView.clear()}" process="@this" update="form_register" />
+				<p:commandButton value="Save Category" action="#{categoryView.save}" update="form_register, form_list, growl_msg" />
+			</p:fieldset>
+		</h:form>
+
+		<br />
+		<br />
+		<br />
+		<!-- Iniciando listagem -->
+		<h:form id="form_list">
+			<p:fieldset legend="Category List">
+				<p:dataTable id="categories" var="category_row" value="#{categoryView.listCategory}" paginator="true" rows="10"
+					paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {Exporters}">
+
+					<f:facet name="{Exporters}">
+						<div style="float:right; padding-top: 10px;">
+							<h:commandLink rendered="#{not empty categoryView.listCategory}">
+								<p:graphicImage value="/images/pdf.png" width="30" />
+								<p:dataExporter type="pdf" target="categories" fileName="archive_list_category"/>						
+							</h:commandLink>
+						</div>
+					</f:facet>
+
+					<p:column style="width:20%; border:0px !important; text-align:center;">
+						<f:facet name="header">Cod</f:facet>
+						<h:outputText value="#{category_row.id}" />
+					</p:column>
+
+					<p:column style="width:40%; border:0px !important;">
+						<f:facet name="header">Description</f:facet>
+						<h:outputText value="#{category_row.name}" />
+					</p:column>
+
+					<p:column style="border:0px !important;" exportable="false">
+						<f:facet name="header"></f:facet>
+						<p:commandLink id="category_edit" action="#{categoryView.edit(category_row)}" update="form_register, growl_msg" title="Edit">
+							<i class="fa fa-pencil" />
+						</p:commandLink>
+					</p:column>
+
+					<p:column style="border:0px !important;" exportable="false">
+						<f:facet name="header"></f:facet>
+						<p:commandLink id="category_delete" action="#{categoryView.remove(category_row)}" update="form_list, growl_msg" title="Delete">
+							<i class="fa fa-trash" />
+						</p:commandLink>
+					</p:column>
+								
+				</p:dataTable>
+			</p:fieldset>		
+		</h:form>
+
+	</ui:define>
 </ui:composition>
